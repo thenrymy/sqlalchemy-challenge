@@ -51,7 +51,10 @@ def homepage():
 @app.route('/api/v1.0/precipitation')
 def precipitation():
     '''Dictionary of Date: prcp'''
-    results = session.query(Measurement.date, Measurement.prcp).all()
+    twelve_months_ago = dt.date(2017, 8, 23) - dt.timedelta(days=365)
+    results = session.query(Measurement.date, Measurement.prcp).\
+        filter(Measurement.date >= twelve_months_ago).\
+        all()
     precipitation = {date: prcp for date, prcp in results}
     return jsonify (precipitation)
 
